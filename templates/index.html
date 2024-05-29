@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Football Video Player</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="margin-top: 3%">
+            <div class="col-md-9">
+                <div class="video-container mb-3">
+                    <div id="videoWrapper" class="video-wrapper">
+                        <video id="videoPlayer" class="w-100 mb-3" autoplay loop>
+                            <source src="{{ url_for('get_video', filename=videos[0], folder=folder) }}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="progress" id="progressBar">
+                        <div class="progress-bar" id="progress" role="progressbar" style="width: 0;"></div>
+                    </div>
+                    <div class="controls text-center mt-2">
+                        <button class="btn btn-outline-dark mx-1" onclick="previousVideo()"><i class="fas fa-step-backward"></i></button>
+                        <button class="btn btn-outline-warning mx-1" onmousedown="startRewind()" onmouseup="stopRewind()" onmouseleave="stopRewind()" ontouchstart="startRewind()" ontouchend="stopRewind()"><i class="fas fa-backward"></i></button>
+                        <button class="btn btn-outline-info mx-1" onmousedown="startStepping(-2)" onmouseup="stopStepping()" onmouseleave="stopStepping()" ontouchstart="startStepping(-1)" ontouchend="stopStepping()"><i class="fas fa-backward"></i></button>
+                        <button class="btn btn-outline-primary mx-1" onclick="playPause()"><i class="fas fa-play"></i>/<i class="fas fa-pause"></i></button>
+                        <button class="btn btn-outline-info mx-1" onmousedown="startStepping(2)" onmouseup="stopStepping()" onmouseleave="stopStepping()" ontouchstart="startStepping(1)" ontouchend="stopStepping()"><i class="fas fa-forward"></i></button>
+                        <button class="btn btn-outline-warning mx-1" onmousedown="startFastForward()" onmouseup="stopFastForward()" onmouseleave="stopFastForward()" ontouchstart="startFastForward()" ontouchend="stopFastForward()"><i class="fas fa-forward"></i></button>
+                        <button class="btn btn-outline-dark mx-1" onclick="nextVideo()"><i class="fas fa-step-forward"></i></button>
+                        <button class="btn btn-outline-secondary mx-1" onclick="toggleLoop()"><i class="fas fa-sync-alt"></i></button>
+                        <div class="input-group mx-1" style="width: 150px; display: inline-flex;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Speed</span>
+                            </div>
+                            <input type="number" id="speed" class="form-control" value="1" step="0.1" min="0.1" max="5" onchange="setSpeed()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3 text-center">
+                    <button class="btn btn-primary mb-2 w-100" onclick="changeFolder('offense')">Offense</button>
+                    <button class="btn btn-secondary mb-2 w-100" onclick="changeFolder('defense')">Defense</button>
+                    <button class="btn btn-success mb-2 w-100" onclick="changeFolder('specialteam')">Special Team</button>
+                </div>
+                <div class="mb-3">
+                    <select id="videoSelect" class="form-control" onchange="loadVideo()">
+                        {% for video in videos %}
+                            <option value="{{ video }}">{{ video }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/video_controls.js') }}"></script>
+</body>
+</html>
